@@ -9,7 +9,8 @@
     "dev": "yarn interface:dev",
     "interface:dev": "yarn workspace @web2.7-sns/interface dev",
     "interface:lint": "yarn workspace @web2.7-sns/interface lint",
-    "interface:fix-all": "yarn interface:lint --fix && yarn workspace @web2.7-sns/interface format"
+    "interface:fix-all": "yarn interface:lint --fix && yarn workspace @web2.7-sns/interface format",
+    "backend:dev": "yarn workspace @crypteen/backend start:dev"
   },
   "workspaces": {
     "packages": [
