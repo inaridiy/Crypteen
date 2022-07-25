@@ -1,0 +1,17 @@
+{
+  "name": "web3-sns",
+  "version": "1.0.0",
+  "repository": "https://github.com/inaridiy/web3-sns.git",
+  "author": "inaridiy",
+  "license": "GPL-v3",
+  "private": true,
+  "scripts": {},
+  "workspaces": {
+    "packages": [
+      "projects/*"
+    ]
+  },
+  "devDependencies": {
+    "ts-node": "^10.7.0"
+  }
+}
