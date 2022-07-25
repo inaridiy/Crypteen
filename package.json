@@ -6,7 +6,10 @@
   "license": "GPL-v3",
   "private": true,
   "scripts": {
-    "dev": " yarn workspace @web2.7-sns/interface dev"
+    "dev": "yarn interface:dev",
+    "interface:dev": "yarn workspace @web2.7-sns/interface dev",
+    "interface:lint": "yarn workspace @web2.7-sns/interface lint",
+    "interface:fix-all": "yarn interface:lint --fix && yarn workspace @web2.7-sns/interface format"
   },
   "workspaces": {
     "packages": [
@@ -14,6 +17,8 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-import": "^2.26.0",
+    "prettier": "^2.7.1",
     "ts-node": "^10.7.0"
   }
 }
