@@ -1,5 +1,7 @@
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <div className="btn btn-block btn-ghost btn-lg text-2xl">Hello World</div>
+  );
 }
 
 export default App;
