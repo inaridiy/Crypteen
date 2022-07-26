@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts/access/IAccessControl.sol";
+import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
-interface IForwarder is IAccessControl {
+interface IForwarder is IAccessControlEnumerable {
   struct ForwardRequest {
     address from;
     address to;
@@ -13,6 +13,18 @@ interface IForwarder is IAccessControl {
     uint256 nonce;
     bytes data;
   }
+
+  event MetaTx(
+    address indexed from,
+    uint256 indexed nonce,
+    address indexed to,
+    uint256 value,
+    uint256 gas,
+    uint256 expiry,
+    bytes data,
+    bool success,
+    bytes result
+  );
 
   function getNonce(address from) external view returns (uint256);
 
