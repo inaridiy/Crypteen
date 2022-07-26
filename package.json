@@ -6,9 +6,9 @@
   "license": "GPL-v3",
   "private": true,
   "scripts": {
-    "dev": "yarn interface:dev",
-    "interface:dev": "yarn workspace @web2.7-sns/interface dev",
-    "interface:lint": "yarn workspace @web2.7-sns/interface lint",
+    "dev": "run-p interface:dev backend:dev",
+    "interface:dev": "yarn workspace @crypteen/interface dev",
+    "interface:lint": "yarn workspace @crypteen/interface lint",
     "interface:fix-all": "yarn interface:lint --fix && yarn workspace @web2.7-sns/interface format",
     "backend:dev": "yarn workspace @crypteen/backend start:dev"
   },
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "eslint-plugin-import": "^2.26.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "ts-node": "^10.7.0"
   }
