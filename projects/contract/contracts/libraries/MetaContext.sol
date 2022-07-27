@@ -5,7 +5,7 @@ import "../interfaces/IMetaContext.sol";
 import "../interfaces/IForwarderPermitter.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
-abstract contract MetaContect is IMetaContext, Context {
+abstract contract MetaContext is IMetaContext, Context {
   address private _permitter;
 
   constructor(address permitter) {
