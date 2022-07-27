@@ -6,7 +6,7 @@ import "../interfaces/IForwarderPermitter.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
 abstract contract MetaContext is IMetaContext, Context {
-  address private _permitter;
+  address internal _permitter;
 
   constructor(address permitter) {
     _permitter = permitter;
