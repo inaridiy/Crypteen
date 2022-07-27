@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "typechain": "hardhat typechain"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.6.4",

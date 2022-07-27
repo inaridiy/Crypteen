@@ -20,5 +20,7 @@ interface ICrypteenMeishi is IMetaContext, IERC721Metadata, IERC721Enumerable {
     uint256 amount;
   }
 
+  function meishi() external view returns (MeishiType memory);
+
   function mint(Ticket calldata ticket, bytes calldata signature) external;
 }

@@ -6,6 +6,7 @@ import "./interfaces/ICrypteenMeishi.sol";
 import "./libraries/MetaContext.sol";
 import "./CrypteenMeishi.sol";
 import "@openzeppelin/contracts/utils/Create2.sol";
+import "hardhat/console.sol";
 
 contract CrypteenFactory is ICrypteenFactory, MetaContext {
   constructor(address permitter) MetaContext(permitter) {}
@@ -52,7 +53,7 @@ contract CrypteenFactory is ICrypteenFactory, MetaContext {
       meishiHash(meishiType),
       abi.encodePacked(contractByteCode, initializeCode)
     );
-
+    emit CreateMeishi(_msgSender(), meishiAddress);
     return meishiAddress;
   }
 }

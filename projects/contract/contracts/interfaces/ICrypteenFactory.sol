@@ -2,6 +2,8 @@
 pragma solidity 0.8.9;
 
 interface ICrypteenFactory {
+  event CreateMeishi(address indexed from, address meishi);
+
   function createMeishi(
     string calldata name,
     string calldata symbol,

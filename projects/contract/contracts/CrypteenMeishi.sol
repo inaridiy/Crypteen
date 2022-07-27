@@ -31,12 +31,16 @@ contract CrypteenMeishi is
       )
     );
 
-  constructor(MeishiType memory meishi, address permitter)
-    ERC721(meishi.name, meishi.symbol)
+  constructor(MeishiType memory meishiType, address permitter)
+    ERC721(meishiType.name, meishiType.symbol)
     MetaContext(permitter)
     EIP712("CypteenMeishi", "0.0.0")
   {
-    _meishiType = meishi;
+    _meishiType = meishiType;
+  }
+
+  function meishi() public view returns (MeishiType memory) {
+    return _meishiType;
   }
 
   function verifyTicket(Ticket calldata ticket, bytes calldata signature)
