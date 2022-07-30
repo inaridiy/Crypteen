@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { CrypteenMeishi__factory } from "../../typechain-types";
 
 import { CrypteenFactory } from "../../typechain-types";
-import { MeishiArg } from "../constant";
+import { MeishiArg, SAMPLE_MEISHI } from "../constant";
 import { findMeishiAddress } from "./findMeishiAddress";
 
 export const deployPermitter = async () => {
@@ -24,8 +24,8 @@ export const getMeishiContract = (address: string) => {
 };
 
 export const getSigners = async () => {
-  const [owner, ...addrs] = await ethers.getSigners();
-  return { owner, addrs };
+  const [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+  return { owner, addr1, addr2, addrs };
 };
 
 export const deployContracts = async () => {
@@ -34,9 +34,26 @@ export const deployContracts = async () => {
   return { permitter, factory };
 };
 
-export const deploySample = (factory: CrypteenFactory, meishi: MeishiArg) => {
+export const deployMeishi = (factory: CrypteenFactory, meishi: MeishiArg) => {
+  return getMeishiAddress(factory, meishi).then((address) =>
+    CrypteenMeishi__factory.connect(address as string, ethers.provider)
+  );
+};
+
+export const getMeishiAddress = (
+  factory: CrypteenFactory,
+  meishi: MeishiArg
+) => {
   const { name, symbol, baseURI, isTransferable, isDynamic } = meishi;
   return factory
     .createMeishi(name, symbol, baseURI, isTransferable, isDynamic)
     .then(findMeishiAddress);
+};
+
+export const getPrepared = async () => {
+  const { permitter, factory } = await deployContracts();
+  const meishi = await deployMeishi(factory, SAMPLE_MEISHI);
+  const signers = await getSigners();
+
+  return { permitter, factory, meishi, ...signers };
 };

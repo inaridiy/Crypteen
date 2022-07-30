@@ -10,8 +10,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract CrypteenMeishi is
   ICrypteenMeishi,
-  ERC721Enumerable,
   MetaContext,
+  ERC721Enumerable,
   EIP712
 {
   using ECDSA for bytes32;
@@ -32,8 +32,8 @@ contract CrypteenMeishi is
     );
 
   constructor(MeishiType memory meishiType, address permitter)
-    ERC721(meishiType.name, meishiType.symbol)
     MetaContext(permitter)
+    ERC721(meishiType.name, meishiType.symbol)
     EIP712("CypteenMeishi", "0.0.0")
   {
     _meishiType = meishiType;

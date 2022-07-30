@@ -3,7 +3,7 @@ import { SAMPLE_MEISHI, SAMPLE_MEISHI2 } from "./constant";
 import {
   BNUM,
   deployContracts,
-  deploySample,
+  getMeishiAddress,
   getMeishiContract,
   getSigners,
 } from "./utils";
@@ -12,7 +12,7 @@ describe("CrypteenFactory", () => {
   it("testing create meishi", async () => {
     const { factory } = await deployContracts();
     const { owner } = await getSigners();
-    const address = await deploySample(factory, SAMPLE_MEISHI);
+    const address = await getMeishiAddress(factory, SAMPLE_MEISHI);
     expect(Boolean(address)).is.true;
     const meishi = getMeishiContract(address as string);
     expect((await meishi.meishi()).author).to.equal(owner.address);
@@ -20,13 +20,13 @@ describe("CrypteenFactory", () => {
 
   it("testing enumerator", async () => {
     const { factory } = await deployContracts();
-    const {
-      owner,
-      addrs: [addr1],
-    } = await getSigners();
-    const address1 = await deploySample(factory, SAMPLE_MEISHI);
-    const address2 = await deploySample(factory, SAMPLE_MEISHI2);
-    const address3 = await deploySample(factory.connect(addr1), SAMPLE_MEISHI);
+    const { owner, addr1 } = await getSigners();
+    const address1 = await getMeishiAddress(factory, SAMPLE_MEISHI);
+    const address2 = await getMeishiAddress(factory, SAMPLE_MEISHI2);
+    const address3 = await getMeishiAddress(
+      factory.connect(addr1),
+      SAMPLE_MEISHI
+    );
     console.log(address1, address2, address3);
     expect(await factory.meishiBalances(owner.address)).to.eq(BNUM(2));
     expect(await factory.meishiBalances(addr1.address)).to.eq(BNUM(1));
