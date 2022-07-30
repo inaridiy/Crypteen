@@ -1,6 +1,10 @@
 import { ethers } from "hardhat";
 import { CrypteenMeishi__factory } from "../../typechain-types";
 
+import { CrypteenFactory } from "../../typechain-types";
+import { MeishiArg } from "../constant";
+import { findMeishiAddress } from "./findMeishiAddress";
+
 export const deployPermitter = async () => {
   const factory = await ethers.getContractFactory("ForwarderPermitter");
   const instance = await factory.deploy();
@@ -19,8 +23,20 @@ export const getMeishiContract = (address: string) => {
   return CrypteenMeishi__factory.connect(address, ethers.provider);
 };
 
+export const getSigners = async () => {
+  const [owner, ...addrs] = await ethers.getSigners();
+  return { owner, addrs };
+};
+
 export const deployContracts = async () => {
   const permitter = await deployPermitter();
   const factory = await deployFactory(permitter.address);
   return { permitter, factory };
+};
+
+export const deploySample = (factory: CrypteenFactory, meishi: MeishiArg) => {
+  const { name, symbol, baseURI, isTransferable, isDynamic } = meishi;
+  return factory
+    .createMeishi(name, symbol, baseURI, isTransferable, isDynamic)
+    .then(findMeishiAddress);
 };

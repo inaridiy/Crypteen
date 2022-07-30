@@ -13,7 +13,8 @@
     "backend:dev": "yarn workspace @crypteen/backend start:dev",
     "contract:compile": "yarn workspace @crypteen/contract compile",
     "contract:test": "yarn workspace @crypteen/contract test",
-    "contract:typechain": "yarn workspace @crypteen/contract typechain"
+    "contract:typechain": "yarn workspace @crypteen/contract typechain",
+    "contract:coverage": "yarn workspace @crypteen/contract coverage"
   },
   "workspaces": {
     "packages": [

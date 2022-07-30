@@ -46,7 +46,8 @@ contract CrypteenFactory is ICrypteenFactory, MetaContext {
     emit CreateMeishi(_msgSender(), meishiAddress);
     uint256 length = meishiBalances[_msgSender()];
     ownedMeishis[_msgSender()][length] = meishiAddress;
-    allMeishis.push(meishi);
+    meishiBalances[_msgSender()] += 1;
+    allMeishis.push(meishiAddress);
 
     return meishiAddress;
   }
