@@ -1,32 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
+import "./CrypteenMeishi.sol";
 import "./interfaces/ICrypteenFactory.sol";
 import "./interfaces/ICrypteenMeishi.sol";
 import "./libraries/MetaContext.sol";
-import "./CrypteenMeishi.sol";
 import "@openzeppelin/contracts/utils/Create2.sol";
-import "hardhat/console.sol";
 
 contract CrypteenFactory is ICrypteenFactory, MetaContext {
+  mapping(address => mapping(uint256 => address)) public ownedMeishis;
+  mapping(address => uint256) public meishiBalances;
+  address[] public allMeishis;
+
   constructor(address permitter) MetaContext(permitter) {}
 
-  function meishiHash(ICrypteenMeishi.MeishiType memory meishi)
-    public
-    pure
-    returns (bytes32 hash)
-  {
-    return
-      keccak256(
-        abi.encodePacked(
-          meishi.author,
-          meishi.name,
-          meishi.symbol,
-          meishi.baseURI,
-          meishi.isTransferable,
-          meishi.isDynamic
-        )
-      );
+  function totalSupply() public view returns (uint256) {
+    return allMeishis.length;
   }
 
   function createMeishi(
@@ -45,15 +34,20 @@ contract CrypteenFactory is ICrypteenFactory, MetaContext {
       isDynamic
     );
 
-    bytes memory contractByteCode = type(CrypteenMeishi).creationCode;
-    bytes memory initializeCode = abi.encode(meishiType, _permitter);
-
     address meishiAddress = Create2.deploy(
       0,
-      meishiHash(meishiType),
-      abi.encodePacked(contractByteCode, initializeCode)
+      keccak256(abi.encode(meishiType)),
+      abi.encodePacked(
+        type(CrypteenMeishi).creationCode,
+        abi.encode(meishiType, _permitter)
+      )
     );
+
     emit CreateMeishi(_msgSender(), meishiAddress);
+    uint256 length = meishiBalances[_msgSender()];
+    ownedMeishis[_msgSender()][length] = meishiAddress;
+    allMeishis.push(meishi);
+
     return meishiAddress;
   }
 }
