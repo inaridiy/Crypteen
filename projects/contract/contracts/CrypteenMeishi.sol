@@ -34,7 +34,7 @@ contract CrypteenMeishi is
   constructor(MeishiType memory meishiType, address permitter)
     MetaContext(permitter)
     ERC721(meishiType.name, meishiType.symbol)
-    EIP712("CypteenMeishi", "0.0.0")
+    EIP712("CypteenMeishi", "1")
   {
     _meishiType = meishiType;
   }

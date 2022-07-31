@@ -27,7 +27,6 @@ describe("CrypteenFactory", () => {
       factory.connect(addr1),
       SAMPLE_MEISHI
     );
-    console.log(address1, address2, address3);
     expect(await factory.meishiBalances(owner.address)).to.eq(BNUM(2));
     expect(await factory.meishiBalances(addr1.address)).to.eq(BNUM(1));
     expect(await factory.totalSupply()).to.eq(BNUM(3));
