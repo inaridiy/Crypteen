@@ -2,7 +2,12 @@ import { ethers } from "hardhat";
 import { CrypteenMeishi__factory } from "../../typechain-types";
 
 import { CrypteenFactory } from "../../typechain-types";
-import { MeishiArg, SAMPLE_MEISHI } from "../constant";
+import {
+  DYNAMIC_MEISHI,
+  MeishiArg,
+  SAMPLE_MEISHI,
+  TRANSFERABLE_MEISHI,
+} from "../constant";
 import { findMeishiAddress } from "./findMeishiAddress";
 
 export const deployPermitter = async () => {
@@ -53,7 +58,16 @@ export const getMeishiAddress = (
 export const getPrepared = async () => {
   const { permitter, factory } = await deployContracts();
   const meishi = await deployMeishi(factory, SAMPLE_MEISHI);
+  const dynamicMeishi = await deployMeishi(factory, DYNAMIC_MEISHI);
+  const transferableMeishi = await deployMeishi(factory, TRANSFERABLE_MEISHI);
   const signers = await getSigners();
 
-  return { permitter, factory, meishi, ...signers };
+  return {
+    permitter,
+    factory,
+    meishi,
+    dynamicMeishi,
+    transferableMeishi,
+    ...signers,
+  };
 };

@@ -25,10 +25,38 @@ const SAMPLE_MEISHI2: MeishiArg = {
   isDynamic: false,
 };
 
+const DYNAMIC_MEISHI: MeishiArg = {
+  name: "sample_meishi",
+  symbol: "sample",
+  baseURI: "ipfs://meishi",
+  isTransferable: false,
+  isDynamic: true,
+};
+
+const TRANSFERABLE_MEISHI: MeishiArg = {
+  name: "sample_meishi",
+  symbol: "sample",
+  baseURI: "ipfs://meishi",
+  isTransferable: true,
+  isDynamic: false,
+};
+
 const SAMPLE_TICKET: ICrypteenMeishi.TicketStruct = {
   id: ethers.utils.id("test_ticket"),
-  expiry: 1000000000,
-  amount: 1000000000,
+  expiry: (Date.now() / 1000 + 3600) | 0, //現在時刻から1時間後
+  amount: 100,
+};
+
+const EXPIRED_TICKET: ICrypteenMeishi.TicketStruct = {
+  id: ethers.utils.id("test_ticket"),
+  expiry: 0, //現在時刻から1時間後
+  amount: 100,
+};
+
+const ONETIME_TICKET: ICrypteenMeishi.TicketStruct = {
+  id: ethers.utils.id("test_ticket"),
+  expiry: (Date.now() / 1000 + 3600) | 0, //現在時刻から1時間後
+  amount: 1,
 };
 
 const EIP712Domain = [
@@ -54,6 +82,10 @@ export {
   MeishiArg,
   SAMPLE_MEISHI,
   SAMPLE_MEISHI2,
+  DYNAMIC_MEISHI,
   SAMPLE_TICKET,
+  EXPIRED_TICKET,
+  ONETIME_TICKET,
+  TRANSFERABLE_MEISHI,
   EIP712Domain,
 };

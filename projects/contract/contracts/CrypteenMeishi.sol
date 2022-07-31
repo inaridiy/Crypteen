@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "hardhat/console.sol";
 
 contract CrypteenMeishi is
   ICrypteenMeishi,
@@ -56,18 +57,15 @@ contract CrypteenMeishi is
 
   function mint(Ticket calldata ticket, bytes calldata signature) public {
     require(
-      block.timestamp < ticket.expiry &&
+      ticket.expiry > block.timestamp &&
         _numOfTicketsUsed[ticket.id] < ticket.amount,
-      "CrypteenMeishi: Unavailable Tickets"
+      "Meishi: Unavailable Tickets"
     );
     require(
       !_ticketUsageHistory[ticket.id][_msgSender()],
-      "CrypteenMeishi: Used tickets"
+      "Meishi: Used tickets"
     );
-    require(
-      verifyTicket(ticket, signature),
-      "CrypteenMeishi: Unauthorized signature"
-    );
+    require(verifyTicket(ticket, signature), "Meishi: Unauthorized signature");
 
     uint256 newTokenId = totalSupply();
     _numOfTicketsUsed[ticket.id] += 1;
@@ -88,8 +86,16 @@ contract CrypteenMeishi is
     }
   }
 
-  function _beforeTokenTransfer() internal view {
-    require(_meishiType.isTransferable, "CrypteenMeishi: Non transferable");
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) internal override {
+    super._beforeTokenTransfer(from, to, tokenId);
+    require(
+      _meishiType.isTransferable || from == address(0),
+      "Meishi: Non transferable"
+    );
   }
 
   function _msgSender()
