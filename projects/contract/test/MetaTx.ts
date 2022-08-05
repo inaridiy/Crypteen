@@ -27,6 +27,6 @@ describe("MetaTx", () => {
       await findMetaTxMeishiAddress(tx),
       ethers.provider
     );
-    expect((await meishi.meishi()).author).to.be(addr1.address);
+    expect((await meishi.meishi()).author).to.eq(addr1.address);
   });
 });
