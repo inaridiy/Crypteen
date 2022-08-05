@@ -33,6 +33,7 @@ const DYNAMIC_MEISHI: MeishiArg = {
   isDynamic: true,
 };
 
+
 const TRANSFERABLE_MEISHI: MeishiArg = {
   name: "sample_meishi",
   symbol: "sample",

@@ -1,28 +1,32 @@
+import { expect } from "chai";
 import { ethers } from "hardhat";
-import { IForwarder } from "../typechain-types";
-import { SAMPLE_MEISHI } from "./constant";
-import { getPrepared } from "./utils";
+import { CrypteenMeishi__factory, IForwarder } from "../typechain-types";
+import { SAMPLE_MEISHI2 } from "./constant";
+import { findMetaTxMeishiAddress, getPrepared } from "./utils";
 import { signMetaTx } from "./verify";
 
 describe("MetaTx", () => {
   it("create meishi with metaTx", async () => {
-    const { forwarder, owner, factory, meishi, addr1 } = await getPrepared();
+    const { forwarder, owner, factory, addr1 } = await getPrepared();
     const request: IForwarder.ForwardRequestStruct = {
       from: addr1.address,
-      to: meishi.address,
+      to: factory.address,
       value: 0,
       gas: 100000000,
       expiry: (await ethers.provider.getBlock("latest")).timestamp + 100,
       nonce: (await forwarder.getNonce(addr1.address)).toNumber(),
       data: factory.interface.encodeFunctionData(
-        "createMeishi" as any,
-        Object.values(SAMPLE_MEISHI) as any
+        "createMeishi",
+        Object.values(SAMPLE_MEISHI2) as any
       ),
     };
 
     const signature = await signMetaTx(forwarder, addr1, request);
     const tx = await forwarder.connect(owner).execute(request, signature);
-    const yeah = await tx.wait();
-    console.log(yeah.events?.[0]);
+    const meishi = CrypteenMeishi__factory.connect(
+      await findMetaTxMeishiAddress(tx),
+      ethers.provider
+    );
+    expect((await meishi.meishi()).author).to.be(addr1.address);
   });
 });
