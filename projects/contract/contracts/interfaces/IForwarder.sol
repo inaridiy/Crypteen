@@ -7,11 +7,11 @@ interface IForwarder is IAccessControlEnumerable {
   struct ForwardRequest {
     address from;
     address to;
+    bytes data;
     uint256 value;
     uint256 gas;
     uint256 expiry;
     uint256 nonce;
-    bytes data;
   }
 
   event MetaTx(

@@ -4,6 +4,7 @@ import { CrypteenMeishi__factory } from "../../typechain-types";
 import { CrypteenFactory } from "../../typechain-types";
 import {
   DYNAMIC_MEISHI,
+  FORWARDER_ROLE,
   MeishiArg,
   SAMPLE_MEISHI,
   TRANSFERABLE_MEISHI,
@@ -20,6 +21,13 @@ export const deployPermitter = async () => {
 export const deployFactory = async (permitter: string) => {
   const factory = await ethers.getContractFactory("CrypteenFactory");
   const instance = await factory.deploy(permitter);
+  await instance.deployed();
+  return instance;
+};
+
+export const deployForwarder = async () => {
+  const factory = await ethers.getContractFactory("Forwarder");
+  const instance = await factory.deploy("SampleForwarder", "1");
   await instance.deployed();
   return instance;
 };
@@ -57,13 +65,16 @@ export const getMeishiAddress = (
 
 export const getPrepared = async () => {
   const { permitter, factory } = await deployContracts();
+  const forwarder = await deployForwarder();
   const meishi = await deployMeishi(factory, SAMPLE_MEISHI);
   const dynamicMeishi = await deployMeishi(factory, DYNAMIC_MEISHI);
   const transferableMeishi = await deployMeishi(factory, TRANSFERABLE_MEISHI);
   const signers = await getSigners();
+  await permitter.grantRole(FORWARDER_ROLE, forwarder.address);
 
   return {
     permitter,
+    forwarder,
     factory,
     meishi,
     dynamicMeishi,

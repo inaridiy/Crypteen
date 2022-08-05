@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
+import "hardhat/console.sol";
 
 contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
   using ECDSA for bytes32;
@@ -31,6 +32,7 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
     EIP712(name_, version_)
   {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(EXECUTER_ROLE, _msgSender());
   }
 
   function getNonce(address from) public view returns (uint256) {
@@ -58,6 +60,7 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
           req.to,
           req.value,
           req.gas,
+          req.expiry,
           req.nonce,
           keccak256(req.data)
         )
@@ -75,7 +78,7 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
   {
     require(
       verify(req, signature),
-      "AwlForwarder: signature does not match request"
+      "Forwarder: signature does not match request"
     );
 
     _nonces[req.from] += 1;

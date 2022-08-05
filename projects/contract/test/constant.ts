@@ -59,6 +59,9 @@ const ONETIME_TICKET: ICrypteenMeishi.TicketStruct = {
   amount: 1,
 };
 
+const FORWARDER_ROLE = ethers.utils.id("FORWARDER_ROLE");
+const EXECUTER_ROLE = ethers.utils.id("EXECUTER_ROLE");
+
 const EIP712Domain = [
   {
     name: "name",
@@ -87,5 +90,7 @@ export {
   EXPIRED_TICKET,
   ONETIME_TICKET,
   TRANSFERABLE_MEISHI,
+  FORWARDER_ROLE,
+  EXECUTER_ROLE,
   EIP712Domain,
 };
