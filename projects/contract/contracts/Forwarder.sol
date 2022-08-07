@@ -80,11 +80,25 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
       "Forwarder: signature does not match request"
     );
 
+    uint256 gasForTransfer = 0;
+    if (req.value != 0) {
+      gasForTransfer = 40000; //buffer in case we need to move eth after the transaction.
+    }
+
+    require(
+      (gasleft() * 63) / 64 >= req.gas + gasForTransfer,
+      "Forwarder: insufficient gas"
+    );
+
     _nonces[req.from] += 1;
     (bool _success, bytes memory _result) = req.to.call{
       gas: req.gas,
       value: req.value
     }(abi.encodePacked(req.data, req.from));
+
+    if (req.value != 0 && address(this).balance > 0) {
+      payable(req.from).transfer(address(this).balance);
+    }
 
     emit MetaTx(
       req.from,
