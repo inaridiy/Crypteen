@@ -13,7 +13,8 @@ describe("MetaTx", () => {
       to: factory.address,
       value: 0,
       gas: 100000000,
-      expiry: (await ethers.provider.getBlock("latest")).timestamp + 100,
+      validUntilTime:
+        (await ethers.provider.getBlock("latest")).timestamp + 100,
       nonce: (await forwarder.getNonce(addr1.address)).toNumber(),
       data: factory.interface.encodeFunctionData(
         "createMeishi",

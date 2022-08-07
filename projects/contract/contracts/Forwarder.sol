@@ -19,9 +19,9 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
         "address to,",
         "uint256 value,",
         "uint256 gas,",
-        "uint256 expiry,",
         "uint256 nonce,",
-        "bytes data",
+        "bytes data,",
+        "uint256 validUntilTime",
         ")"
       )
     );
@@ -59,16 +59,16 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
           req.to,
           req.value,
           req.gas,
-          req.expiry,
           req.nonce,
-          keccak256(req.data)
+          keccak256(req.data),
+          req.validUntilTime
         )
       )
     ).recover(signature);
     return
       _nonces[req.from] == req.nonce &&
       signer == req.from &&
-      block.timestamp < req.expiry;
+      block.timestamp < req.validUntilTime;
   }
 
   function _execute(ForwardRequest calldata req, bytes calldata signature)
@@ -92,8 +92,8 @@ contract Forwarder is IForwarder, AccessControlEnumerable, Pausable, EIP712 {
       req.to,
       req.value,
       req.gas,
-      req.expiry,
       req.data,
+      req.validUntilTime,
       _success,
       _result
     );
